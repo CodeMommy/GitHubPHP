@@ -7,6 +7,10 @@
 
 namespace CodeMommy;
 
+/**
+ * Class GitHubPHP
+ * @package CodeMommy
+ */
 class GitHubPHP
 {
     const INTERFACE_URL_ROOT = 'https://api.github.com/';
@@ -15,6 +19,23 @@ class GitHubPHP
     private $user       = '';
     private $repository = '';
 
+    /**
+     * GitHubPHP constructor.
+     *
+     * @param string $url
+     */
+    public function __construct($url = '')
+    {
+        $this->setURL($url);
+    }
+
+    /**
+     * Get Content
+     *
+     * @param string $url
+     *
+     * @return string $content
+     */
     private function getContent($url)
     {
         if (empty($url)) {
@@ -28,7 +49,7 @@ class GitHubPHP
         curl_setopt($curl, CURLOPT_TIMEOUT, 120);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($curl, CURLOPT_USERAGENT, 'hello');
+        curl_setopt($curl, CURLOPT_USERAGENT, 'GitHub');
         $result = curl_exec($curl);
         if (curl_errno($curl)) {
             return '';
@@ -43,16 +64,43 @@ class GitHubPHP
         return $return['content'];
     }
 
+    /**
+     * Get Interface URL
+     *
+     * @param string $content
+     *
+     * @return string $url
+     */
     private function getInterfaceURL($content)
     {
         return sprintf('%s%s', self::INTERFACE_URL_ROOT, $content);
     }
 
-    public function __construct($url = '')
+    /**
+     * Show
+     *
+     * @param bool $status
+     * @param string $message
+     * @param null $data
+     *
+     * @return array
+     */
+    private function show($status = true, $message = '', $data = null)
     {
-        $this->setURL($url);
+        $return = array();
+        $return['status'] = $status;
+        $return['message'] = $message;
+        $return['data'] = $data;
+        return $return;
     }
 
+    /**
+     * Set URL
+     *
+     * @param string $url
+     *
+     * @return void
+     */
     public function setURL($url)
     {
         $this->url = strtolower($url);
@@ -71,43 +119,84 @@ class GitHubPHP
         }
     }
 
+    /**
+     * Get User
+     * @return string $user
+     */
     public function getUser()
     {
         return $this->user;
     }
 
+    /**
+     * Get Repository
+     * @return string $repository
+     */
     public function getRepository()
     {
         return $this->repository;
     }
 
+    /**
+     * Get User Information
+     * @return array
+     */
     public function getUserInformation()
     {
+        $return = array();
+        $return['raw'] = array();
+        $return['data'] = array();
+        $return['data']['name'] = '';
+        $return['data']['about'] = '';
+        $return['data']['avatar'] = '';
         $interfaceURL = $this->getInterfaceURL(sprintf('users/%s', $this->user));
         $content = $this->getContent($interfaceURL);
         $result = json_decode($content, true);
-        $return = array();
+        if (isset($result['message'])) {
+            return $this->show(false, $result['message']);
+        }
         $return['raw'] = $result;
         $return['data']['name'] = $result['name'];
         $return['data']['about'] = $result['bio'];
         $return['data']['avatar'] = $result['avatar_url'];
-        return $return;
+        $return['data']['type'] = $result['type'];
+        $return['data']['url'] = $result['html_url'];
+        $return['data']['email'] = $result['email'];
+        $return['data']['website'] = $result['blog'];
+        $return['data']['company'] = $result['company'];
+        $return['data']['location'] = $result['location'];
+        $return['data']['isHireable"'] = $result['hireable'];
+        $return['data']['countPublicRepository'] = $result['public_repos'];
+        $return['data']['countPublicGist'] = $result['public_gists'];
+        $return['data']['countFollower'] = $result['followers'];
+        $return['data']['countFollowing'] = $result['following'];
+        return $this->show(true, '', $return);
     }
 
-    public function getMembers(){
+    /**
+     * Get Members
+     * @return array
+     */
+    public function getMembers()
+    {
+        $return = array();
+        $return['raw'] = array();
+        $return['data'] = array();
         $interfaceURL = $this->getInterfaceURL(sprintf('orgs/%s/public_members', $this->user));
         $content = $this->getContent($interfaceURL);
         $result = json_decode($content, true);
-        $return = array();
+        if (isset($result['message'])) {
+            return $this->show(false, $result['message']);
+        }
         $return['raw'] = $result;
-        $return['data'] = array();
-        foreach($result as $value){
+        foreach ($result as $value) {
             $array = array();
             $array['name'] = $value['login'];
             $array['url'] = $value['html_url'];
+            $array['type'] = $value['type'];
             $array['avatar'] = $value['avatar_url'];
             array_push($return['data'], $array);
         }
-        return $return;
+        return $this->show(true, '', $return);
     }
 }
