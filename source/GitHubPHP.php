@@ -199,4 +199,32 @@ class GitHubPHP
         }
         return $this->show(true, '', $return);
     }
+
+    /**
+     * Get Events
+     * @return array
+     */
+    public function getEvents()
+    {
+        $return = array();
+        $return['raw'] = array();
+        $return['data'] = array();
+        $interfaceURL = $this->getInterfaceURL(sprintf('orgs/%s/events', $this->user));
+        $content = $this->getContent($interfaceURL);
+        $result = json_decode($content, true);
+        if (isset($result['message'])) {
+            return $this->show(false, $result['message']);
+        }
+        //$return['raw'] = $result;
+        foreach ($result as $value) {
+            $array = array();
+            $array['actorName'] = $value['actor']['login'];
+            $array['type'] = $value['type'];
+            $array['repositoryName'] = $value['repo']['name'];
+            $array['time'] = date('Y-m-d H:i:s', strtotime($value['created_at']));
+            $array['message'] = $value['payload']['commits'][0]['message'];
+            array_push($return['data'], $array);
+        }
+        return $this->show(true, '', $return);
+    }
 }
