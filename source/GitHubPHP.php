@@ -15,9 +15,12 @@ class GitHubPHP
 {
     const INTERFACE_URL_ROOT = 'https://api.github.com/';
 
-    private $url        = '';
-    private $user       = '';
-    private $repository = '';
+    private $size         = 0;
+    private $url          = '';
+    private $user         = '';
+    private $repository   = '';
+    private $clientID     = '';
+    private $clientSecret = '';
 
     /**
      * GitHubPHP constructor.
@@ -27,6 +30,25 @@ class GitHubPHP
     public function __construct($url = '')
     {
         $this->setURL($url);
+        $this->setSize(1000);
+    }
+
+    /**
+     * Show
+     *
+     * @param bool $status
+     * @param string $message
+     * @param null $data
+     *
+     * @return array
+     */
+    private function show($status = true, $message = '', $data = null)
+    {
+        $return = array();
+        $return['status'] = $status;
+        $return['message'] = $message;
+        $return['data'] = $data;
+        return $return;
     }
 
     /**
@@ -73,25 +95,28 @@ class GitHubPHP
      */
     private function getInterfaceURL($content)
     {
-        return sprintf('%s%s', self::INTERFACE_URL_ROOT, $content);
+        if (empty($this->clientID) || empty($this->clientSecret)) {
+            return sprintf('%s%s?page=1&per_page=%s', self::INTERFACE_URL_ROOT, $content, $this->size);
+        }
+        return sprintf('%s%s?client_id=%s&client_secret=%s&page=1&per_page=%s', self::INTERFACE_URL_ROOT, $content, $this->clientID, $this->clientSecret, $this->size);
     }
 
     /**
-     * Show
-     *
-     * @param bool $status
-     * @param string $message
-     * @param null $data
-     *
-     * @return array
+     * Get User
+     * @return string $user
      */
-    private function show($status = true, $message = '', $data = null)
+    public function getUser()
     {
-        $return = array();
-        $return['status'] = $status;
-        $return['message'] = $message;
-        $return['data'] = $data;
-        return $return;
+        return $this->user;
+    }
+
+    /**
+     * Get Repository
+     * @return string $repository
+     */
+    public function getRepository()
+    {
+        return $this->repository;
     }
 
     /**
@@ -120,21 +145,39 @@ class GitHubPHP
     }
 
     /**
-     * Get User
-     * @return string $user
+     * Set Client ID
+     *
+     * @param string $clientID
+     *
+     * @return void
      */
-    public function getUser()
+    public function setClientID($clientID)
     {
-        return $this->user;
+        $this->clientID = $clientID;
     }
 
     /**
-     * Get Repository
-     * @return string $repository
+     * Set Client Secret
+     *
+     * @param string $clientSecret
+     *
+     * @return void
      */
-    public function getRepository()
+    public function setClientSecret($clientSecret)
     {
-        return $this->repository;
+        $this->clientSecret = $clientSecret;
+    }
+
+    /**
+     * Set Size
+     *
+     * @param string $size
+     *
+     * @return void
+     */
+    public function setSize($size)
+    {
+        $this->size = intval($size);
     }
 
     /**

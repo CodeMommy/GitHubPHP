@@ -11,5 +11,6 @@ use CodeMommy\GitHubPHP;
 
 $server = new GitHubPHP();
 $server->setURL('https://github.com/CodeMommy/GitHubPHP');
+$server->setSize(30);
 $result = $server->getOrganizationMembers();
 var_dump($result);

@@ -11,5 +11,6 @@ use CodeMommy\GitHubPHP;
 
 $server = new GitHubPHP();
 $server->setURL('https://github.com/KanDisheng/Home');
+$server->setSize(30);
 $result = $server->getUserInformation();
 var_dump($result);
