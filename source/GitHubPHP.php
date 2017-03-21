@@ -147,7 +147,7 @@ class GitHubPHP
         $return['raw'] = array();
         $return['data'] = array();
         $return['data']['name'] = '';
-        $return['data']['about'] = '';
+        $return['data']['description'] = '';
         $return['data']['avatar'] = '';
         $interfaceURL = $this->getInterfaceURL(sprintf('users/%s', $this->user));
         $content = $this->getContent($interfaceURL);
@@ -157,7 +157,7 @@ class GitHubPHP
         }
         $return['raw'] = $result;
         $return['data']['name'] = $result['name'];
-        $return['data']['about'] = $result['bio'];
+        $return['data']['description'] = $result['bio'];
         $return['data']['avatar'] = $result['avatar_url'];
         $return['data']['type'] = $result['type'];
         $return['data']['url'] = $result['html_url'];
@@ -174,10 +174,45 @@ class GitHubPHP
     }
 
     /**
-     * Get Members
+     * Get Organization Information
      * @return array
      */
-    public function getMembers()
+    public function getOrganizationInformation()
+    {
+        $return = array();
+        $return['raw'] = array();
+        $return['data'] = array();
+        $return['data']['name'] = '';
+        $return['data']['description'] = '';
+        $return['data']['avatar'] = '';
+        $interfaceURL = $this->getInterfaceURL(sprintf('orgs/%s', $this->user));
+        $content = $this->getContent($interfaceURL);
+        $result = json_decode($content, true);
+        if (isset($result['message'])) {
+            return $this->show(false, $result['message']);
+        }
+        $return['raw'] = $result;
+        $return['data']['name'] = $result['name'];
+        $return['data']['description'] = $result['description'];
+        $return['data']['avatar'] = $result['avatar_url'];
+        $return['data']['type'] = $result['type'];
+        $return['data']['url'] = $result['html_url'];
+        $return['data']['email'] = $result['email'];
+        $return['data']['website'] = $result['blog'];
+        $return['data']['company'] = $result['company'];
+        $return['data']['location'] = $result['location'];
+        $return['data']['countPublicRepository'] = $result['public_repos'];
+        $return['data']['countPublicGist'] = $result['public_gists'];
+        $return['data']['countFollower'] = $result['followers'];
+        $return['data']['countFollowing'] = $result['following'];
+        return $this->show(true, '', $return);
+    }
+
+    /**
+     * Get Organization Members
+     * @return array
+     */
+    public function getOrganizationMembers()
     {
         $return = array();
         $return['raw'] = array();
@@ -201,10 +236,10 @@ class GitHubPHP
     }
 
     /**
-     * Get Events
+     * Get Organization Events
      * @return array
      */
-    public function getEvents()
+    public function getOrganizationEvents()
     {
         $return = array();
         $return['raw'] = array();

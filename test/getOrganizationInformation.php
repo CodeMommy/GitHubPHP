@@ -11,5 +11,5 @@ use CodeMommy\GitHubPHP;
 
 $server = new GitHubPHP();
 $server->setURL('https://github.com/CodeMommy/GitHubPHP');
-$result = $server->getEvents();
+$result = $server->getOrganizationInformation();
 var_dump($result);
