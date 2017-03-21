@@ -215,7 +215,7 @@ class GitHubPHP
         if (isset($result['message'])) {
             return $this->show(false, $result['message']);
         }
-        //$return['raw'] = $result;
+        $return['raw'] = $result;
         foreach ($result as $value) {
             $array = array();
             $array['actorName'] = $value['actor']['login'];
