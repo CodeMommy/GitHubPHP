@@ -5,13 +5,13 @@
  * @author  Candison November <www.kandisheng.com>
  */
 
-namespace CodeMommy;
+namespace CodeMommy\GitHubPHP;
 
 /**
  * Class GitHubPHP
  * @package CodeMommy
  */
-class GitHubPHP
+class GitHub
 {
     const INTERFACE_URL_ROOT = 'https://api.github.com/';
 

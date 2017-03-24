@@ -5,11 +5,11 @@
  * @author  Candison November <www.kandisheng.com>
  */
 
-require_once(__DIR__ . '/../source/GitHubPHP.php');
+require_once(__DIR__ . '/../source/GitHub.php');
 
-use CodeMommy\GitHubPHP;
+use CodeMommy\GitHubPHP\GitHub;
 
-$server = new GitHubPHP();
+$server = new GitHub();
 $server->setURL('https://github.com/CodeMommy/GitHubPHP');
 $server->setSize(30);
 $result = $server->getOrganizationEvents();

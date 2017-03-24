@@ -1,6 +1,6 @@
 {
   "name": "codemommy/githubphp",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "CodeMommy GitHubPHP is a GitHub API for PHP.",
   "keywords": [
     "CodeMommy",
@@ -23,7 +23,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "CodeMommy\\": "source/"
+      "CodeMommy\\GitHubPHP\\": "source/"
     }
   },
   "require": {
