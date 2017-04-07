@@ -7,7 +7,7 @@
 [![composer.lock Available](https://poser.pugx.org/CodeMommy/GitHubPHP/composerlock?format=flat-square)](https://packagist.org/packages/CodeMommy/GitHubPHP)
 
 
-> CodeMommy GitHubPHP is a GitHub API for PHP.
+> GitHub API SDK
 
 Visit [CodeMommy Website](http://www.codemommy.com) or [Packagist](https://packagist.org/packages/CodeMommy/GitHubPHP) to get more information.
 

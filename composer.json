@@ -1,7 +1,7 @@
 {
   "name": "codemommy/githubphp",
   "version": "0.0.6",
-  "description": "CodeMommy GitHubPHP is a GitHub API for PHP.",
+  "description": "GitHub API SDK",
   "keywords": [
     "CodeMommy",
     "GitHubPHP",
